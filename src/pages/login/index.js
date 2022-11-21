@@ -3,6 +3,11 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Container } from "./style";
 import { useForm, Controller } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { USER_ACTION_TYPE } from "../../store/User/reducer";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../store/User/selector";
+
 function Login(props) {
   const {
     register,
@@ -12,9 +17,16 @@ function Login(props) {
     formState: { errors },
     setValue,
   } = useForm();
+  const dispatch = useDispatch();
+  const updatedUser = useSelector(loginUser);
+
   const height = window.screen.width;
+  const navigate = useNavigate();
   const userData = (data) => {
-    console.log(data);
+    data.isLogin = true;
+    dispatch({ type: USER_ACTION_TYPE.SET_CURRENT_USER, payload: data });
+
+    navigate("/home", { replace: true });
   };
   return (
     <Container height={height} className="App">
